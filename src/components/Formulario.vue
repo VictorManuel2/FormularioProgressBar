@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12 mb-4">
-        <progress-bar :porcentaje="porcentaje"/> 
+      <progress-bar :porcentaje="porcentaje" />
     </div>
     <div class="col-12 col-md-4">
       <form @submit.prevent="registrarProyecto">
@@ -38,85 +38,74 @@
       </form>
     </div>
     <div class="col-12 col-md-8">
-      <total-proyectos :numeroProyectos="numeroProyectos" :proyectos="proyectos" :cambiarEstado="cambiarEstado" :limpiarData="limpiarData"/>
+      <total-proyectos
+        :numeroProyectos="numeroProyectos"
+        :proyectos="proyectos"
+        :cambiarEstado="cambiarEstado"
+        :limpiarData="limpiarData"
+        :borrarItem="borrarItem"
+      />
     </div>
   </div>
 </template>
-
 <script>
-  import ProgressBar from './ProgressBar.vue';
-  import TotalProyectos from './TotalProyectos.vue';
-  export default {
-    data: () => ({
-      proyecto: "",
-      tipo: "",
-      urgente: false,
-      proyectos: [],
-    }),
-    methods: {
-      registrarProyecto(){
-        const proyecto = {
-          proyecto: this.proyecto,
-          tipo: this.tipo,
-          urgente: this.urgente,
-          completado: false,
-        };
-        this.proyectos.push(proyecto);
-        this.saveData();
-        
-        this.proyecto = "";
-        this.tipo = "";
-        this.urgente = false;
-
-      },
-      cambiarEstado(proyecto, campo){
-       // this.urgente = !this.urgente;
-        //this.proyectos[id].urgente = !this.proyectos[id].urgente;
-        proyecto[campo] = !proyecto[campo];
-        this.saveData();
-      },
-      saveData(){
-        localStorage.setItem("proyectos", JSON.stringify(this.proyectos));
-      },
-      eliminarItem(){
-
-      },
-      limpiarData(){
-        this.proyectos = [],
-        localStorage.clear();
-      }
-    },
-    computed: {
-      numeroProyectos () {
-        return this.proyectos.length;
-      },
-      porcentaje (){
-        let completados = 0;
-        this.proyectos.map(proyecto => {
-           if(proyecto.completado)
-            completados++;
-        });
-        return (completados * 100) / this.numeroProyectos || 0;
-      },
-    },
-    components:{ ProgressBar, TotalProyectos },
-    mounted (){
-      this.proyectos = JSON.parse(localStorage.getItem("proyectos")) || [];
-    }
-  };
-</script>
-<!-- 
-<script>
+import ProgressBar from "./ProgressBar.vue";
+import TotalProyectos from "./TotalProyectos.vue";
 export default {
   data: () => ({
-    nombre: "",
-    edad: 0,
-    correo: "",
+    proyecto: "",
+    tipo: "",
+    urgente: false,
+    proyectos: [],
   }),
   methods: {
-    addUser() {
-      console.log(this.nombre, this.edad, this.correo);
+    registrarProyecto() {
+      const proyecto = {
+        proyecto: this.proyecto,
+        tipo: this.tipo,
+        urgente: this.urgente,
+        completado: false,
+      };
+      this.proyectos.push(proyecto);
+      this.saveData();
+      this.proyecto = "";
+      this.tipo = "";
+      this.urgente = false;
+    },
+    cambiarEstado(proyecto, campo) {
+      // this.proyectos[id].urgente = !this.proyectos[id].urgente;
+      proyecto[campo] = !proyecto[campo];
+      this.saveData();
+    },
+    saveData() {
+      localStorage.setItem("proyectos", JSON.stringify(this.proyectos));
+    },
+    limpiarData() {
+      this.proyectos = [];
+      localStorage.clear();
+    },
+    borrarItem(proyecto) {
+      this.proyectos = this.proyectos.filter(
+        (p) => p.proyecto != proyecto.proyecto
+      );
+      this.saveData();
     },
   },
+  computed: {
+    numeroProyectos() {
+      return this.proyectos.length;
+    },
+    porcentaje() {
+      let completados = 0;
+      this.proyectos.map((proyecto) => {
+        if (proyecto.completado) completados++;
+      });
+      return (completados * 100) / this.numeroProyectos || 0;
+    },
+  },
+  components: { ProgressBar, TotalProyectos },
+  mounted() {
+    this.proyectos = JSON.parse(localStorage.getItem("proyectos")) || [];
+  },
 };
-</script> -->
+</script>
