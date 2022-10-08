@@ -1,5 +1,12 @@
 <template>
-  <h3>Total de proyectos: {{ numeroProyectos }}</h3>
+  <div class="row my-3">
+    <div class="col-6">
+      <h3>Total de proyectos: {{ numeroProyectos }}</h3>
+    </div>
+    <div class="col-6 text-end">
+      <button @click="limpiarData" class="btn btn-warning">limpiar proyectos</button>
+    </div>
+  </div>
       <div class="table-responsive">
         <table class="table table-dark table-hover">
           <thead>
@@ -9,6 +16,7 @@
               <th>Tipo</th>
               <th>Urgente</th>
               <th>Completado</th>
+              <th>Eliminar</th>
             </tr>
           </thead>
           <tbody>
@@ -18,7 +26,7 @@
               <td>{{ proyecto.tipo }}</td>
               <td
                 @click="cambiarEstado(proyecto, 'urgente')"
-                :class="proyecto.urgente ? 'bg-success' : 'bg-danger'"
+                :class="proyecto.urgente ? 'bg-danger' : 'bg-success'"
               >
                 {{ proyecto.urgente ? "Sí" : "No" }}
               </td>
@@ -28,6 +36,9 @@
               >
                 {{ proyecto.completado ? "Completado" : "Incompleto" }}
               </td>
+              <td @click="eliminarItem(proyecto, index)" class='btn-danger'>
+                Eliminar
+              </td>
             </tr>
           </tbody>
         </table>
@@ -36,6 +47,6 @@
 
 <script>
     export default{
-        props: ['numeroProyectos', 'proyectos', 'cambiarEstado'],
-    }
+        props: ['numeroProyectos', 'proyectos', 'cambiarEstado', 'limpiarData'],
+    };
 </script>
